@@ -1,0 +1,8 @@
+_version.py
+build/
+dist/
+env/
+*.egg-info/
+version.txt
+
+*.pyc
