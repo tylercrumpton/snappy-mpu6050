@@ -24,9 +24,9 @@ STBY_ZA      = 0x08 # Z-axis acceleromter standby
 STBY_XG      = 0x04 # X-axis gyro standby
 STBY_YG      = 0x02 # Y-axis gyro standby
 STBY_ZG      = 0x01 # Z-axis gyro standby
-    
-def init_imu():
-    i2cInit(True)
+
+def init_imu(SCL, SDA):
+    i2cInit(True, SCL, SDA)
     write_imu_data(PWR_MGMT_1, chr(0x00)) # Wake up the IMU
     write_imu_data(MOT_THR, chr(150))  # Set the motion detection threshold
     prev = read_imu_data(INT_ENABLE, 1)
@@ -41,7 +41,7 @@ def get_imu_gryo(axis):
 
         Arguments:
             axis (string): Axis to retrieve value for - "x", "y", or "z"
-            
+
         Returns:
             int: Rotational velocity for axis from -32768 to 32767 for
                  -250deg/s to 250deg/sec
@@ -53,8 +53,8 @@ def get_imu_gryo(axis):
     elif axis == "z":
         axis_command = GYRO_ZOUT_H
     else:
-        return 0  
-    
+        return 0
+
     return _get_sensor_reading(axis_command)
 
 def get_imu_accel(axis):
@@ -62,7 +62,7 @@ def get_imu_accel(axis):
 
         Arguments:
             axis (string): Axis to retrieve value for - "x", "y", or "z"
-            
+
         Returns:
             int: Acceleration value for axis from -32768 to 32767 for -2g to 2g
     """
@@ -74,21 +74,21 @@ def get_imu_accel(axis):
         axis_command = ACCEL_ZOUT_H
     else:
         return 0
-    
+
     return _get_sensor_reading(axis_command)
 
 def _get_sensor_reading(command):
     """Get a 2-byte reading from the IMU and convert to an integer.
-    
+
     Arguments:
         command (int): Command to collect reading for
-        
+
     Returns:
         int: Integer value of the collected reading
     """
-    
+
     val = read_imu_data(command, 2)
-    
+
     # Need to convert the hi/lo byte string to an integer:
     return ord(val[0]) << 8 | ord(val[1])
 
@@ -99,16 +99,16 @@ def write_imu_data(registerAddress, data):
     cmd += chr( registerAddress )
     cmd += data
     i2cWrite(cmd, 10, False)
-    
+
 def read_imu_data(registerAddress, bytes):
     slaveAddress = MPU6050_ADDRESS
     cmd = ""
     cmd += chr( slaveAddress )
     cmd += chr( registerAddress )
     i2cWrite(cmd, 10, False)
-    
+
     cmd = ""
     cmd += chr( slaveAddress | 1 )
     retval = i2cRead(cmd, bytes, 10, False)
-    
+
     return retval
