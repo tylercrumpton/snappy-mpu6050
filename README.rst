@@ -20,7 +20,7 @@ For use with SNAPbuild
 The easiest way to install ``snappy-mpu6050`` for use with SNAPbuild is
 using `pip`_::
 
-    pip install snapy-mpu6050
+    pip install snappy-mpu6050
 
 Alternatively you can download the source, extract it, and install it::
 
