@@ -1,7 +1,7 @@
 Synapse SNAPpy library for Ivensense MPU-6050
 =============================================
 
-``snappy-mpu605`` is a SNAPpy library that communicates with the
+``snappy-mpu6050`` is a SNAPpy library that communicates with the
 Invensense MPU-6050 6-axis accelerometer/gyro.
 
 Installation
